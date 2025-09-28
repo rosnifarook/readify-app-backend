@@ -32,6 +32,7 @@ async function main() {
   await mongoose.connect(process.env.DB_URL);
   app.use('/',(req, res)=>{
     res.send('Book store server running!')
+    console.log('Book store server running!')
 })
 }
 
