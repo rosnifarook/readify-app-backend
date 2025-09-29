@@ -9,7 +9,7 @@ require('dotenv').config()
 // middleware
 app.use(express.json());
 app.use(cors({
-    origin: ['http://localhost:5173', 'https://readify-app-frontend.vercel.app'],
+    origin: ['https://readify-app-frontend.vercel.app','http://localhost:5173'],
     credentials: true
 }))
 
@@ -26,13 +26,21 @@ app.use("/api/admin", adminRoutes)
 
 async function main() {
   await mongoose.connect(process.env.DB_URL);
-  app.use("/", (req, res) => {
+  app.get("/", (req, res) => {
     res.send("Book Store Server is running!");
   });
 }
 
 main().then(() => console.log("Mongodb connect successfully!")).catch(err => console.log(err));
 
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
-});
+// app.listen(port, () => {
+//   console.log(`Example app listening on port ${port}`);
+// });
+
+if (process.env.VERCEL) {
+  module.exports = app; // for @vercel/node on Vercel
+} else {
+  app.listen(port, () => {
+    console.log(`Server is running on port ${port}`);
+ });
+}
